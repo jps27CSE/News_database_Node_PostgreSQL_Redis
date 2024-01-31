@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.9.0",
+    "@vinejs/vine": "^1.7.1",
     "dotenv": "^16.4.1",
     "express": "^4.18.2"
   },
