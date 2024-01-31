@@ -1,0 +1,21 @@
+{
+  "name": "news_database_node_postgresql_redis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "server": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "prisma": "^5.9.0"
+  }
+}
