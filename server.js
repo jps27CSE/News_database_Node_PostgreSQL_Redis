@@ -3,10 +3,12 @@ import "dotenv/config";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+import fileUpload from "express-fileupload";
 
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(fileUpload());
 
 app.get("/", (req, res) => {
   return res.json("Hello World");
