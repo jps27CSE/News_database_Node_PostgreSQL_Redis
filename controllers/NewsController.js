@@ -127,7 +127,19 @@ class NewsController {
       return res.status(500).json({ message: "something went wrong" });
     }
   }
-  static async update(req, res) {}
+  static async update(req, res) {
+    const { id } = req.params;
+    const user = req.user;
+    const news = await prisma.news.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    if (user.id !== news.user_id) {
+      return res.status(400).json({ message: "unAuthorized" });
+    }
+  }
   static async destroy(req, res) {}
 }
 
