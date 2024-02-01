@@ -2,6 +2,7 @@ import prisma from "../DB/db.config.js";
 import vine, { errors } from "@vinejs/vine";
 import { loginSchema, registerSchema } from "../validations/authValidaiton.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 class AuthController {
   static async register(req, res) {
@@ -74,7 +75,23 @@ class AuthController {
           });
         }
 
-        return res.json({ message: "Logged In" });
+        // issue user token
+
+        const payloadData = {
+          id: findUser.id,
+          name: findUser.name,
+          email: findUser.email,
+          profile: findUser.profile,
+        };
+
+        const token = jwt.sign(payloadData, process.env.JWT_SECRET, {
+          expiresIn: "365d",
+        });
+
+        return res.json({
+          message: "Logged In",
+          access_token: `Bearer ${token}`,
+        });
       }
 
       return res.status(400).json({
