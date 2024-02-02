@@ -1,4 +1,5 @@
 import prisma from "../DB/db.config.js";
+import redisCache from "../DB/redis.config.js";
 import NewsApiTransform from "../transform/newsApiTransform.js";
 import {
   generateRandomNum,
@@ -85,6 +86,11 @@ class NewsController {
 
       const news = await prisma.news.create({
         data: payload,
+      });
+
+      //remove cache
+      redisCache.del("/api/news", (err) => {
+        if (err) throw err;
       });
 
       return res.json({ status: 200, message: "news created successfully" });
