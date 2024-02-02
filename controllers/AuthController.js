@@ -3,6 +3,8 @@ import vine, { errors } from "@vinejs/vine";
 import { loginSchema, registerSchema } from "../validations/authValidaiton.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { sendEmail } from "../config/mailer.js";
+import logger from "../config/logger.js";
 
 class AuthController {
   static async register(req, res) {
@@ -112,6 +114,27 @@ class AuthController {
           message: "something went wrong,, please try again later",
         });
       }
+    }
+  }
+
+  // send test mail
+  static async sendTestMail(req, res) {
+    try {
+      const { email } = req.query;
+
+      const payload = {
+        toEmail: email,
+        subject: "Hey i am just testing",
+        body: "<h1>Hey i am just testing</h1>",
+      };
+
+      await sendEmail(payload.toEmail, payload.subject, payload.body);
+      return res.json({ status: 200, message: "Email sent successfully" });
+    } catch (error) {
+      logger.error({ type: "Email Error", body: error });
+      return res
+        .status(500)
+        .json({ message: "Something went wrong, please try again later" });
     }
   }
 }
