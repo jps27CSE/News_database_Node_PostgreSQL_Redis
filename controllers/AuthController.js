@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../config/mailer.js";
 import logger from "../config/logger.js";
+import { emailQueue, emailQueueName } from "../jobs/SendEmailJob.js";
 
 class AuthController {
   static async register(req, res) {
@@ -128,8 +129,11 @@ class AuthController {
         body: "<h1>Hey i am just testing</h1>",
       };
 
-      await sendEmail(payload.toEmail, payload.subject, payload.body);
-      return res.json({ status: 200, message: "Email sent successfully" });
+      // await sendEmail(payload.toEmail, payload.subject, payload.body);
+
+      await emailQueue.add(emailQueueName, payload);
+
+      return res.json({ status: 200, message: "Job Added Successfully" });
     } catch (error) {
       logger.error({ type: "Email Error", body: error });
       return res
