@@ -1,5 +1,6 @@
 import prisma from "../DB/db.config.js";
 import redisCache from "../DB/redis.config.js";
+import logger from "../config/logger.js";
 import NewsApiTransform from "../transform/newsApiTransform.js";
 import {
   generateRandomNum,
@@ -95,7 +96,8 @@ class NewsController {
 
       return res.json({ status: 200, message: "news created successfully" });
     } catch (error) {
-      console.log("error is", error);
+      logger.error(error?.message);
+
       if (error instanceof errors.E_VALIDATION_ERROR) {
         // console.log(error.messages);
         return res.status(400).json({ errors: error.messages });
